@@ -9,7 +9,7 @@
         packaging==22.0
         pandas==1.5.3
         ...
-    After "requirements.txt" file is generated, run below command from CMD would install pypi packages:
+    After "requirements.txt" file is generated, program send below command to CMD to install pypi packages:
         pip install --no-index -r requirements.txt --find-links=.\
         
 '''
@@ -17,7 +17,7 @@ import os
 import glob
 
 file_ext = 'whl'
-
+py_package_requirement_filename = 'requirements.txt'
 
 # set working dir to to path of py script file
 cwd = os.path.abspath('')
@@ -29,15 +29,13 @@ all_filenames = [i for i in glob.glob('**/*.{}'.format(file_ext), recursive=True
 
 # If all_filenames is empty then quit program
 if len(all_filenames) == 0:
-    print("Found no matched file in 'Input' folder")
+    print("Found no matched file in current folder")
     print("Program exit now")
     exit()
 
-#
-
 # filename = "aiofiles-22.1.0-py3-none-any.whl"
 # prepare to writing wanted result to "requirements.txt" file
-result_textfile = open("requirements.txt", "w")
+result_textfile = open(py_package_requirement_filename, "w")
 
 for name in all_filenames:
     parts = name.split("-")
@@ -50,3 +48,10 @@ for name in all_filenames:
 
 result_textfile.close()
 print("Generated requirements.txt file succesfully")
+
+print("Send command to Windows CMD to install packages:")
+# CMD command syntax: pip install --no-index -r requirements.txt --find-links=.\
+cmd_command = "pip install --no-index -r " + py_package_requirement_filename + " --find-links=.\\"
+
+transfer_command = "cmd /c " + cmd_command
+os.system(transfer_command)
